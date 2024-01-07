@@ -1,1 +1,3 @@
 /csvFiles/*.csv
+build
+.vscode

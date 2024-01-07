@@ -14,7 +14,7 @@ int main() {
     sql::Connection *con;
     sql::Statement *stmt;
 
-    const std::string db_host = "172.17.0.3";
+    const std::string db_host = "172.17.0.2";
     const std::string db_user = "root";
     const std::string db_password = "123456";
     const std::string db_name = "BILLS";
@@ -44,12 +44,15 @@ int main() {
 
       getline(iss, column1, ',');
       getline(iss, column2, ',');
-      getline(iss, column3, ',');
+      getline(iss, column3);
+      if (column3.at(column3.size() - 1) == '\r') {
+        column3.pop_back();
+      }
 
       // insert into db
       std::string query = "INSERT INTO BILLS VALUES('" + column1 + "', '" +
                           column2 + "', '" + column3 + "')";
-      std::cout << query << std::endl;
+      // std::cout << query << std::endl;
       stmt->execute(query);
     }
     std::cout << "Data insert finished." << std::endl;
