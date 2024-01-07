@@ -6,6 +6,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "Timer.h"
+
 int main() {
   try {
     sql::mysql::MySQL_Driver *driver;
@@ -34,6 +36,8 @@ int main() {
     std::string line;
     // skip first line
     getline(csv_file, line);
+    // create timer, report time on dtor
+    Timer t;
     while (getline(csv_file, line)) {
       std::istringstream iss(line);
       std::string column1, column2, column3;
@@ -43,7 +47,6 @@ int main() {
       getline(iss, column3, ',');
 
       // insert into db
-      // TODO timeit
       std::string query = "INSERT INTO BILLS VALUES('" + column1 + "', '" +
                           column2 + "', '" + column3 + "')";
       std::cout << query << std::endl;
