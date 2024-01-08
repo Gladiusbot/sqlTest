@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  mysql_server:
+    image: mysql
+    volumes:
+      - /opt/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - "3306:3306"
+    blkio_config:
+      weight: 300
+      # weight_device:
+      #   - path: /dev/vda3
+      #     weight: 300
+      # device_read_bps:
+      #   - path: /dev/vda3
+      #     rate: '20mb'
+      # device_write_bps:
+      #   - path: /dev/vda3
+      #     rate: '20mb'
+    tty: true
+    stdin_open: true
