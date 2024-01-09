@@ -38,8 +38,6 @@ int insertSQL(const std::string &csv_file_path) {
     std::string line;
     // skip first line
     getline(csv_file, line);
-    // create timer, report time on dtor
-    Timer t;
     int count = 0;
     std::string batchQuery = "";
 
@@ -102,11 +100,12 @@ int main() {
   // thread vector
   std::vector<std::thread> threads;
 
+  // create timer, report time on dtor
+  Timer t;
   for (const auto &csv_file_path : csv_files) {
     std::cout << "reading data from " << csv_file_path << std::endl;
     threads.push_back(std::thread(insertSQL, csv_file_path));
   }
-
   for (auto &thread : threads) {
     thread.join();
   }
