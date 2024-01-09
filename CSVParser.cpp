@@ -7,8 +7,9 @@
 #include <sstream>
 
 #include "Timer.h"
+#define FILE_COUNT 10
 
-int main() {
+int insertSQL(const std::string &csv_file_path) {
   try {
     sql::mysql::MySQL_Driver *driver;
     sql::Connection *con;
@@ -26,14 +27,11 @@ int main() {
     con->setAutoCommit(false);
     stmt = con->prepareStatement("INSERT INTO BILLS VALUES(?, ?, ?)");
 
-    // csv file
-    const std::string csv_file_path = "./csvFiles/data_1.csv";
     std::ifstream csv_file(csv_file_path);
     if (!csv_file.is_open()) {
-      std::cerr << "Failed to open CSV file." << std::endl;
       return 1;
     }
-
+    std::cerr << "Failed to open CSV file." << std::endl;
     // parse
     std::string line;
     // skip first line
@@ -77,8 +75,30 @@ int main() {
     std::cout << "Data insert finished." << std::endl;
     con->setAutoCommit(true);
   } catch (sql::SQLException &e) {
-    std::cerr << "MySQL Errot: " << e.what() << std::endl;
+    std::cerr << "MySQL Error: " << e.what() << std::endl;
     return 1;
+  }
+  return 0;
+}
+
+std::vector<std::string> generateCSVPaths() {
+  std::vector<std::string> v;
+  for (int i = 1; i <= FILE_COUNT; i++) {
+    std::string s = "data_";
+    if (i < 10) {
+      s = s + "0";
+    }
+    s = s + std::to_string(i) + ".csv";
+    v.push_back(move(s));
+  }
+  return v;
+}
+
+int main() {
+  // csv file
+  std::vector<std::string> csv_files = generateCSVPaths();
+  for (const auto &csv_file_path : csv_files) {
+    insertSQL(csv_file_path);
   }
   return 0;
 }
