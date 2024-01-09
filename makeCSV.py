@@ -34,7 +34,7 @@ it_companies = [
 ]
 header = ["NAME", "AMOUNT", "ACCOUNT_ID"]
 csz = len(it_companies)
-ITEMS_PER_FILE = 10000
+ITEMS_PER_FILE = 100000
 
 def generateLine():
     idx = random.randint(0, csz - 1)
