@@ -3,7 +3,7 @@
 start_time=$(date +%s)
 
 for((i=1; i<=10; i++)); do
-    file_name="data_${i}.csv"
+    file_name=$(printf "data_%02d.csv" "$i")
     python3 makeCSV.py "csvFiles/$file_name" &
 done
 
