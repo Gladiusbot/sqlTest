@@ -29,15 +29,13 @@ int insertSQL(const std::string &csv_file_path) {
 
     std::ifstream csv_file(csv_file_path);
     if (!csv_file.is_open()) {
+      std::cerr << "Failed to open CSV file." << std::endl;
       return 1;
     }
-    std::cerr << "Failed to open CSV file." << std::endl;
     // parse
     std::string line;
     // skip first line
     getline(csv_file, line);
-    // create timer, report time on dtor
-    Timer t;
     int count = 0;
     std::string batchQuery = "";
 
@@ -84,7 +82,7 @@ int insertSQL(const std::string &csv_file_path) {
 std::vector<std::string> generateCSVPaths() {
   std::vector<std::string> v;
   for (int i = 1; i <= FILE_COUNT; i++) {
-    std::string s = "data_";
+    std::string s = "./csvFiles/data_";
     if (i < 10) {
       s = s + "0";
     }
@@ -97,7 +95,12 @@ std::vector<std::string> generateCSVPaths() {
 int main() {
   // csv file
   std::vector<std::string> csv_files = generateCSVPaths();
+    
+  // create timer, report time on dtor
+  Timer t;
+
   for (const auto &csv_file_path : csv_files) {
+    std::cout<<"reading data from "<<csv_file_path<<std::endl;
     insertSQL(csv_file_path);
   }
   return 0;
