@@ -34,7 +34,7 @@ it_companies = [
 ]
 header = ["NAME", "AMOUNT", "ACCOUNT_ID"]
 csz = len(it_companies)
-
+ITEMS_PER_FILE = 10000
 
 def generateLine():
     idx = random.randint(0, csz - 1)
@@ -50,7 +50,7 @@ def writeCSV(filename):
     with open(filename, mode="w", newline="") as csv_file:
         csv_writer = csv.writer(csv_file)
         csv_writer.writerow(header)
-        for i in range(100000):
+        for i in range(ITEMS_PER_FILE):
             print(r"writing line:", i)
             bill_list = generateLine()
             csv_writer.writerow(bill_list)
