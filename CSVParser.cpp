@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <thread>
+#include <vector>
 
 #include "Timer.h"
 #define FILE_COUNT 10
@@ -97,9 +99,16 @@ std::vector<std::string> generateCSVPaths() {
 int main() {
   // csv file
   std::vector<std::string> csv_files = generateCSVPaths();
+  // thread vector
+  std::vector<std::thread> threads;
+
   for (const auto &csv_file_path : csv_files) {
-    std::cout<<"reading data from "<<csv_file_path<<std::endl;
-    insertSQL(csv_file_path);
+    std::cout << "reading data from " << csv_file_path << std::endl;
+    threads.push_back(std::thread(insertSQL, csv_file_path));
+  }
+
+  for (auto &thread : threads) {
+    thread.join();
   }
   return 0;
 }
