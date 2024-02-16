@@ -13,6 +13,7 @@
 
 int insertSQL(const std::string &csv_file_path) {
   try {
+    std::ios::sync_with_stdio(false);
     sql::mysql::MySQL_Driver *driver;
     sql::Connection *con;
     sql::PreparedStatement *stmt;
@@ -31,7 +32,7 @@ int insertSQL(const std::string &csv_file_path) {
 
     std::ifstream csv_file(csv_file_path);
     if (!csv_file.is_open()) {
-      std::cerr << "Failed to open CSV file." << std::endl;
+      std::cerr << "Failed to open CSV file." << '\n';
       return 1;
     }
     // parse
@@ -62,20 +63,20 @@ int insertSQL(const std::string &csv_file_path) {
       if (count == 0) {
         con->commit();
         std::cout << "inserting " << batch_size << " items into sql"
-                  << std::endl;
+                  << '\n';
         batchQuery = "";
       }
     }
     if (batchQuery != "") {
-      std::cout << batchQuery << std::endl;
+      std::cout << batchQuery << '\n';
       stmt->execute(batchQuery);
-      std::cout << "inserting remaining items into sql" << std::endl;
+      std::cout << "inserting remaining items into sql" << '\n';
       batchQuery = "";
     }
-    std::cout << "Data insert finished." << std::endl;
+    std::cout << "Data insert finished." << '\n';
     con->setAutoCommit(true);
   } catch (sql::SQLException &e) {
-    std::cerr << "MySQL Error: " << e.what() << std::endl;
+    std::cerr << "MySQL Error: " << e.what() << '\n';
     return 1;
   }
   return 0;
@@ -103,7 +104,7 @@ int main() {
   // create timer, report time on dtor
   Timer t;
   for (const auto &csv_file_path : csv_files) {
-    std::cout << "reading data from " << csv_file_path << std::endl;
+    std::cout << "reading data from " << csv_file_path << '\n';
     threads.push_back(std::thread(insertSQL, csv_file_path));
   }
   for (auto &thread : threads) {
